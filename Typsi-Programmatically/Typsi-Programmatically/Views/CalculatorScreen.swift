@@ -58,8 +58,9 @@ class CalculatorScreen: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("0%", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
-        button.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
         button.isEnabled = true
+        button.backgroundColor = .none
+        button.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
         return button
     }()
     
