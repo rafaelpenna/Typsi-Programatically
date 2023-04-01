@@ -34,9 +34,8 @@ class CalculatorViewController: UIViewController {
         tipsStack.addSubview(zeroPctButton)
         tipsStack.addSubview(tenPctButton)
         tipsStack.addSubview(twentyPctButton)
-        view.addSubview(splitStack)
-        splitStack.addSubview(stepperButton)
-        splitStack.addSubview(splitBillLabel)
+        view.addSubview(splitBillLabel)
+        view.addSubview(stepperButton)
         view.addSubview(calculateButton)
     }
     
@@ -73,12 +72,6 @@ class CalculatorViewController: UIViewController {
         return button
     }()
     
-    lazy var splitStack: UIStackView = {
-        let stack: UIStackView = calculatorScreen.splitStack
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }()
-    
     lazy var splitBillLabel: UILabel = {
         let label: UILabel = calculatorScreen.numberOfPeopleLabel
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +81,7 @@ class CalculatorViewController: UIViewController {
     lazy var stepperButton: UIStepper = {
         let button: UIStepper = calculatorScreen.stepper
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(stepperChanged(_:)), for: .valueChanged)
+        button.addTarget(self, action: #selector(stepperChanged), for: .valueChanged)
         return button
     }()
     
@@ -107,11 +100,39 @@ class CalculatorViewController: UIViewController {
         tenPctButton.isSelected = false
         twentyPctButton.isSelected = false
         sender.isSelected = true
+        
+        if zeroPctButton.isSelected == true {
+            tenPctButton.isSelected = false
+            twentyPctButton.isSelected = false
+        } else {
+            zeroPctButton.backgroundColor = .none
+            zeroPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+        }
+        
+        if tenPctButton.isSelected == true {
+            zeroPctButton.isSelected = false
+            twentyPctButton.isSelected = false
+        } else {
+            tenPctButton.backgroundColor = .none
+            tenPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+        }
+        
+        if twentyPctButton.isSelected == true {
+            tenPctButton.isSelected = false
+            zeroPctButton.isSelected = false
+        } else {
+            twentyPctButton.backgroundColor = .none
+            twentyPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+        }
+        
+        if sender.isSelected == true {
+            sender.backgroundColor = UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1)
+            sender.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1), for: .normal)
+        }
     }
     
     @objc func stepperChanged(_ sender: UIStepper!) {
         splitBillLabel.text = Int(sender.value).description
-        print("is now \(Int(sender.value))")
     }
     
     @objc func calculatePressed(_ sender: UIButton){
@@ -139,10 +160,12 @@ class CalculatorViewController: UIViewController {
         
         
         let resultsViewController = ResultsViewController()
-        self.present(resultsViewController, animated: true, completion: nil)
+//        self.present(resultsViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(resultsViewController, animated: true)
         resultsViewController.result = finalValue
         resultsViewController.tip = tipPercent
         resultsViewController.split = numberToShare
+        
         
         print(finalValue)
         print(numberToShare)

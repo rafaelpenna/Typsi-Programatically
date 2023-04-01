@@ -94,13 +94,6 @@ class CalculatorScreen: UIView {
         return label
     }()
     
-    lazy var splitStack: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        return stack
-    }()
-    
     lazy var numberOfPeopleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -122,6 +115,7 @@ class CalculatorScreen: UIView {
         stepper.isContinuous = true
         stepper.isEnabled = true
         stepper.isUserInteractionEnabled = true
+        stepper.wraps = true
         return stepper
     }()
     
@@ -158,9 +152,8 @@ class CalculatorScreen: UIView {
         tipsStack.addSubview(tenPct)
         tipsStack.addSubview(twentyPct)
         addSubview(splitLabel)
-        addSubview(splitStack)
-        splitStack.addSubview(numberOfPeopleLabel)
-        splitStack.addSubview(stepper)
+        addSubview(numberOfPeopleLabel)
+        addSubview(stepper)
         addSubview(calculateButton)
     }
     
@@ -199,12 +192,10 @@ class CalculatorScreen: UIView {
             splitLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             splitLabel.heightAnchor.constraint(equalToConstant: 30),
             
-            splitStack.topAnchor.constraint(equalTo: splitLabel.bottomAnchor, constant: 15),
-            splitStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
-            splitStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
-            
-            numberOfPeopleLabel.trailingAnchor.constraint(equalTo: splitStack.centerXAnchor, constant: -39),
-            stepper.leadingAnchor.constraint(equalTo: splitStack.centerXAnchor, constant: 39),
+            numberOfPeopleLabel.trailingAnchor.constraint(equalTo: centerXAnchor, constant: -39),
+            numberOfPeopleLabel.centerYAnchor.constraint(equalTo: splitLabel.bottomAnchor, constant: 25),
+            stepper.leadingAnchor.constraint(equalTo: centerXAnchor, constant: 39),
+            stepper.centerYAnchor.constraint(equalTo: splitLabel.bottomAnchor, constant: 25),
             
             calculateButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             calculateButton.centerXAnchor.constraint(equalTo: centerXAnchor),

@@ -55,7 +55,9 @@ class ResultsViewController: UIViewController {
     }()
     
     @objc func recalculatePressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+//        self.dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
+        
     }
 
 
