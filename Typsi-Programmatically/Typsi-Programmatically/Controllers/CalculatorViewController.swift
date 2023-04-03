@@ -11,17 +11,16 @@ class CalculatorViewController: UIViewController {
     
     let calculatorScreen: CalculatorScreen = CalculatorScreen()
     
-    var numberToShare = 2
+    var numberPeopleToShare = 2
     var billValue = 0.0
-    var billShared = 0.0
-    var finalValue = "0.8"
+    var billAfterShared = 0.0
+    var finalValuePresentation = "0.8"
     var tipPercent: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view = calculatorScreen
         addElements()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,42 +100,69 @@ class CalculatorViewController: UIViewController {
         twentyPctButton.isSelected = false
         sender.isSelected = true
         
+        if sender.isSelected == true {
+            sender.backgroundColor = UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1)
+            sender.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1), for: .normal)
+        }
+        
         if zeroPctButton.isSelected == true {
             tenPctButton.isSelected = false
             twentyPctButton.isSelected = false
         } else {
-            zeroPctButton.backgroundColor = .none
-            zeroPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+            zeroTipNotSelected()
         }
         
         if tenPctButton.isSelected == true {
             zeroPctButton.isSelected = false
             twentyPctButton.isSelected = false
         } else {
-            tenPctButton.backgroundColor = .none
-            tenPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+            tenTipNotSelected()
         }
         
         if twentyPctButton.isSelected == true {
             tenPctButton.isSelected = false
             zeroPctButton.isSelected = false
         } else {
-            twentyPctButton.backgroundColor = .none
-            twentyPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
-        }
-        
-        if sender.isSelected == true {
-            sender.backgroundColor = UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1)
-            sender.setTitleColor(UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1), for: .normal)
+            twentyTipNotSelected()
         }
     }
+
+    private func zeroTipNotSelected() {
+        zeroPctButton.backgroundColor = .none
+        zeroPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+    }
+    
+    private func tenTipNotSelected() {
+        tenPctButton.backgroundColor = .none
+        tenPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+    }
+    
+    private func twentyTipNotSelected() {
+        twentyPctButton.backgroundColor = .none
+        twentyPctButton.setTitleColor(UIColor(red: 0/255, green: 176/255, blue: 107/255, alpha: 1), for: .normal)
+    }
+    
     
     @objc func stepperChanged(_ sender: UIStepper!) {
         splitBillLabel.text = Int(sender.value).description
     }
     
     @objc func calculatePressed(_ sender: UIButton){
-        
+        textFieldIsEmpty()
+        finalValueCalculate()
+        sendDataToResultsViewContyroller()
+        resetTextField()
+    }
+    
+    private func textFieldIsEmpty() {
+        if textField.text != "" {
+            billValue = Double(textField.text!)!
+        } else {
+            billValue = 0
+        }
+    }
+    
+    private func finalValueCalculate() {
         var tipValue: Double
         
         if zeroPctButton.isSelected == true {
@@ -150,30 +176,21 @@ class CalculatorViewController: UIViewController {
             tipPercent = 20
         }
         
-        if textField.text != "" {
-            billValue = Double(textField.text!)!
-        }
-        
-        numberToShare = Int(splitBillLabel.text!)!
-        billShared = billValue * tipValue / Double(numberToShare)
-        finalValue = String(format: "%.2f", billShared)
-        
-        
-        let resultsViewController = ResultsViewController()
-//        self.present(resultsViewController, animated: true, completion: nil)
-        self.navigationController?.pushViewController(resultsViewController, animated: true)
-        resultsViewController.result = finalValue
-        resultsViewController.tip = tipPercent
-        resultsViewController.split = numberToShare
-        
-        
-        print(finalValue)
-        print(numberToShare)
-        print(tipPercent)
-        
-        textField.text = ""
-        
+        numberPeopleToShare = Int(splitBillLabel.text!)!
+        billAfterShared = billValue * tipValue / Double(numberPeopleToShare)
+        finalValuePresentation = String(format: "%.2f", billAfterShared)
     }
-
+    
+    private func sendDataToResultsViewContyroller() {
+        let resultsViewController = ResultsViewController()
+        self.navigationController?.pushViewController(resultsViewController, animated: true)
+        resultsViewController.result = finalValuePresentation
+        resultsViewController.tip = tipPercent
+        resultsViewController.split = numberPeopleToShare
+    }
+    
+    private func resetTextField() {
+        textField.text = ""
+    }
 }
 
