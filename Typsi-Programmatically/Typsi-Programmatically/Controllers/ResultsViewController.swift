@@ -17,10 +17,12 @@ class ResultsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view = resultsScreen
         addElements()
-        
+        fillData()
+    }
+    
+    private func fillData(){
         totalLabel.text = result
         settingsLabel.text = "Split between \(split) people, with \(tip)% tip."
     }
@@ -54,11 +56,8 @@ class ResultsViewController: UIViewController {
         return button
     }()
     
+    
     @objc func recalculatePressed(_ sender: UIButton) {
-//        self.dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
-        
     }
-
-
 }
